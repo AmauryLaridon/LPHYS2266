@@ -154,21 +154,21 @@ GSE_Z = data_orb[:, 4]
 for i in range(1, length(prot_density))
     if prot_density[i] == 999.990
         #deleteat!(prot_density, i)
-        prot_density[i] = 3
+        prot_density[i] = (prot_density[i-1] + prot_density[i-2]) / 2
     end
 end
 
 for i in range(1, length(flow_speed))
     if flow_speed[i] == 99999.9
         #deleteat!(flow_speed, i)
-        flow_speed[i] = 280
+        flow_speed[i] = (flow_speed[i-1] + flow_speed[i-2]) / 2
     end
 end
 
 for i in range(1, length(temperature))
     if temperature[i] == 1.00000e+07
         #deleteat!(temperature, i)
-        temperature[i] = 0
+        temperature[i] = (temperature[i-2] + temperature[i-1]) / 2
     end
 end
 
@@ -264,7 +264,7 @@ interp_GSE_Z = interp_func_GSE(new_grid)
 ############################################################ Display ##################################################################
 
 ##### Individual plot of initial data set and filterd data set #####
-
+"""
 plot_flow_speed = plot(time_var, flow_speed, linewidth=0.5, size=(1400, 900), title="Plasma Flow Speed\nWind Mission Data from 12/02/1997 to 04/29/1998", xlabel="Time [minute]", ylabel="flow speed GSE [km/s]", label="Flow Speed", thickness_scaling=1.5)
 #title!("Plasma Flow Speed\nWind Mission Data from 12/02/1997 to 04/29/1998")
 #display(plot_flow_speed)
@@ -314,7 +314,7 @@ plot_interp_GSE_Z = plot(interp_time_grid, interp_GSE_Z, linewidth=1, size=(1400
 title!("Interpolated GSE_Z\nWind Mission Data from 12/02/1997 to 04/29/1998")
 #display(plot_interp_GSE_Z)
 savefig("/home/amaury/Bureau/LPHYS2266 - Physics of the upper atmosphere and space/Projet/Data Analysis/Figures/interp_GSE_Z.png")
-
+"""
 ################################################## Correlation coefficient ###############################################################
 
 println("-------------------------------------------------------------------------")
@@ -363,39 +363,39 @@ end
 plot_cor_temp_Kp = scatter(Kp + rand_ar, interp_temperature, linewidth=1, size=(1400, 900), xlabel="3-h Kp*10", ylabel="Temperature [°K]", label="Kp-Temperature", thickness_scaling=1.5)
 title!("Correlation between Kp Index and Temperature\nWind Mission Data from 12/02/1997 to 04/29/1998")
 var_Kp = std(Kp)
-a = cor_temp_Kp
+a = cor_temp_Kp / var_Kp
 b = mean(interp_temperature) - a * mean(Kp)
-lr = [a * x + b for x in Kp]
-plot!(Kp, lr, label="Linear Regression")
+lr1 = [a * x + b for x in Kp]
+plot!(Kp, lr1, label="Linear Regression")
 #display(plot_Dst)
 savefig("/home/amaury/Bureau/LPHYS2266 - Physics of the upper atmosphere and space/Projet/Data Analysis/Figures/cor_temp_Kp_lr.png")
 
 
-plot_cor_flow_speed_Kp = scatter(Kp + rand_ar, interp_flow_speed, linewidth=1, size=(1400, 900), xlabel="3-h Kp*10", ylabel="Plasma Flow Speed [km/s]", label="Kp-Flow Speed", thickness_scaling=1.5)
+plot_cor_flow_speed_Kp = scatter(Kp + rand_ar, interp_flow_speed + rand_ar, linewidth=1, size=(1400, 900), xlabel="3-h Kp*10", ylabel="Plasma Flow Speed [km/s]", label="Kp-Flow Speed", thickness_scaling=1.5)
 title!("Correlation between Kp Index and Plasma Flow Speed\nWind Mission Data from 12/02/1997 to 04/29/1998")
-a = cor_flow_speed_Kp
+a = cor_flow_speed_Kp / var_Kp
 b = mean(interp_flow_speed) - a * mean(Kp)
-lr = [a * x + b for x in Kp]
-plot!(Kp, lr, label="Linear Regression")
+lr2 = [(a * x) + b for x in Kp]
+plot!(Kp, lr2, label="Linear Regression")
 #display(plot_Dst)
 savefig("/home/amaury/Bureau/LPHYS2266 - Physics of the upper atmosphere and space/Projet/Data Analysis/Figures/cor_flow_speed_Kp_lr.png")
 
 plot_cor_flow_speed_Dst = scatter(Dst + rand_ar, interp_flow_speed, linewidth=1, size=(1400, 900), xlabel="1-h Dst nT", ylabel="Plasma Flow Speed [km/s]", label="Dst-Flow Speed", thickness_scaling=1.5)
 title!("Correlation between Dst Index and Plasma Flow Speed\nWind Mission Data from 12/02/1997 to 04/29/1998")
 var_Dst = std(Dst)
-a = cor_flow_speed_Dst
+a = cor_flow_speed_Dst / var_Dst
 b = mean(interp_flow_speed) - a * mean(Dst)
-lr = [a * x + b for x in Dst]
-plot!(Kp, lr, label="Linear Regression")
+lr3 = [(a * x) + b for x in Dst]
+plot!(Dst, lr3, label="Linear Regression")
 #display(plot_Dst)
 savefig("/home/amaury/Bureau/LPHYS2266 - Physics of the upper atmosphere and space/Projet/Data Analysis/Figures/cor_flow_speed_Dst_lr.png")
 
 plot_cor_flow_speed_GSE = scatter(interp_GSE_Z + rand_ar, interp_flow_speed, linewidth=1, size=(1400, 900), xlabel="GSE_Z", ylabel="Plasma Flow Speed [km/s]", label="GSE_Z-Flow Speed", thickness_scaling=1.5)
 title!("Correlation between GSE_Z and Plasma Flow Speed\nWind Mission Data from 12/02/1997 to 04/29/1998")
 var_GSE = std(GSE_Z)
-a = cor_flow_speed_GSE
+a = cor_flow_speed_GSE / var_GSE
 b = mean(interp_flow_speed) - a * mean(interp_GSE_Z)
-lr = [a * x + b for x in interp_GSE_Z]
-plot!(Kp, lr, label="Linear Regression")
+lr4 = [a * x + b for x in interp_GSE_Z]
+plot!(interp_GSE_Z, lr4, label="Linear Regression")
 #display(plot_Dst)
 savefig("/home/amaury/Bureau/LPHYS2266 - Physics of the upper atmosphere and space/Projet/Data Analysis/Figures/cor_flow_speed_GSE_lr.png")
