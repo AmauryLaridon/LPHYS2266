@@ -267,39 +267,39 @@ end
 plot_cor_temp_Kp = scatter(Kp + rand_ar, interp_temperature, linewidth=1, size=(1400, 900), xlabel="3-h Kp*10", ylabel="Temperature [°K]", label="Kp-Temperature", thickness_scaling=1.5)
 title!("Correlation between Kp Index and Temperature\nWind Mission Data from 12/02/1997 to 04/29/1998")
 var_Kp = std(Kp)
-a = cor_temp_Kp / var_Kp
+a = cov(Kp, interp_temperature) / var_Kp
 b = mean(interp_temperature) - a * mean(Kp)
 lr1 = [a * x + b for x in Kp]
-plot!(Kp, lr1, label="Linear Regression")
+plot!(Kp, lr1, label="Linear Regression", linewidth=1)
 #display(plot_Dst)
 savefig(save_dir * "cor_temp_Kp_lr.png")
 
 
 plot_cor_flow_speed_Kp = scatter(Kp + rand_ar, interp_flow_speed + rand_ar, linewidth=1, size=(1400, 900), xlabel="3-h Kp*10", ylabel="Plasma Flow Speed [km/s]", label="Kp-Flow Speed", thickness_scaling=1.5)
 title!("Correlation between Kp Index and Plasma Flow Speed\nWind Mission Data from 12/02/1997 to 04/29/1998")
-a = cor_flow_speed_Kp / var_Kp
+a = cov(Kp, interp_flow_speed) / var_Kp
 b = mean(interp_flow_speed) - a * mean(Kp)
 lr2 = [(a * x) + b for x in Kp]
-plot!(Kp, lr2, label="Linear Regression")
+plot!(Kp, lr2, label="Linear Regression", linewidth=1)
 #display(plot_Dst)
 savefig(save_dir * "cor_flow_speed_Kp_lr.png")
 
 plot_cor_flow_speed_Dst = scatter(Dst + rand_ar, interp_flow_speed, linewidth=1, size=(1400, 900), xlabel="1-h Dst nT", ylabel="Plasma Flow Speed [km/s]", label="Dst-Flow Speed", thickness_scaling=1.5)
 title!("Correlation between Dst Index and Plasma Flow Speed\nWind Mission Data from 12/02/1997 to 04/29/1998")
 var_Dst = std(Dst)
-a = cor_flow_speed_Dst / var_Dst
+a = cov(Dst, interp_flow_speed) / var_Dst
 b = mean(interp_flow_speed) - a * mean(Dst)
 lr3 = [(a * x) + b for x in Dst]
-plot!(Dst, lr3, label="Linear Regression")
+plot!(Dst, lr3, label="Linear Regression", linewidth=1)
 #display(plot_Dst)
 savefig(save_dir * "cor_flow_speed_Dst_lr.png")
 
 plot_cor_flow_speed_GSE = scatter(interp_GSE_Z + rand_ar, interp_flow_speed, linewidth=1, size=(1400, 900), xlabel="GSE_Z", ylabel="Plasma Flow Speed [km/s]", label="GSE_Z-Flow Speed", thickness_scaling=1.5)
 title!("Correlation between GSE_Z and Plasma Flow Speed\nWind Mission Data from 12/02/1997 to 04/29/1998")
 var_GSE = std(GSE_Z)
-a = cor_flow_speed_GSE / var_GSE
+a = cov(interp_GSE_Z, interp_flow_speed) / var_GSE
 b = mean(interp_flow_speed) - a * mean(interp_GSE_Z)
 lr4 = [a * x + b for x in interp_GSE_Z]
-plot!(interp_GSE_Z, lr4, label="Linear Regression")
+plot!(interp_GSE_Z, lr4, label="Linear Regression", linewidth=1)
 #display(plot_Dst)
 savefig(save_dir * "cor_flow_speed_GSE_lr.png")
