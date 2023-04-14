@@ -1,6 +1,6 @@
 # LPHYS2266 - Physics of the Upper Atmosphere and Space 
 
-![interp_prot_density](https://user-images.githubusercontent.com/58213378/231985336-0390ef95-633b-4342-bff5-f3a1ac34df64.png)
+![flow_speed](https://user-images.githubusercontent.com/58213378/232067769-e731af58-84a1-4a1a-8caf-d229165f501a.png)
 
 Repository used for sharing the Julia scripts, data, figures and report used for the personal project and the personnal exercise. 
 
